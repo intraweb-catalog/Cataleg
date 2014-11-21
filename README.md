@@ -9,7 +9,7 @@ This module builds a catalog with the planning of training activities
   - Allows catalog users management.
 
 Dependencies
-============
+------------
 
 Cataleg module uses:
   - [IWusers module](https://github.com/intraweb-modules13/IWusers) version 3.1.0
@@ -20,11 +20,11 @@ Cataleg module uses:
     - Just inside this module (code in this repo): *mpdf*
 
 Changelog
-=========
+---------
 
-Master branch
--------------
+### Master branch
 
-Cataleg 1.1.1 (2014/11/13)
-------------
-Init version in github
+
+### Cataleg 1.1.1 (2014/11/13)
+
+Init version at github
