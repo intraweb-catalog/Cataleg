@@ -89,7 +89,7 @@ EDICIó D'ORIENTACIONS --------------------------------------------
         <button id="btn_cancel" class="z-bt-cancel"  type="button"  onclick="javascript:history.go(-1);" title="{gt text="Cancel·lar"}">{gt text="Cancel·lar"}</button> 
     </div>
 </div>       
-
+{notifydisplayhooks eventname='Cataleg.ui_hooks.Cataleg.form_edit' id=null}
 <style type="text/css">
     table.gridtable {	
         color:#333333;

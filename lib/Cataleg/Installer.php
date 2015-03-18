@@ -53,6 +53,8 @@ class Cataleg_Installer extends Zikula_AbstractInstaller
             return false;
 
         ModUtil::setVar($this->name, 'novetats', array('dataPublicacio'=>'','diesNovetats'=> 15, 'showNew' => true, 'showMod' => true));
+        
+        HookUtil::registerSubscriberBundles($this->version->getHookSubscriberBundles());
         //Successfull
         return true;
     }
@@ -90,6 +92,8 @@ class Cataleg_Installer extends Zikula_AbstractInstaller
         return false;
         //Esborrar variables del mòdul
         $this->delVars();
+        // unregister hook handlers
+        HookUtil::unregisterSubscriberBundles($this->version->getHookSubscriberBundles());
         return true;
     }
     
@@ -117,6 +121,8 @@ class Cataleg_Installer extends Zikula_AbstractInstaller
                 if (isset($var2)) ModUtil::delVar('Cataleg', 'usuarisCataleg');
                 
             case '1.1.1':
+                HookUtil::registerSubscriberBundles($this->version->getHookSubscriberBundles());
+            case '1.1.2':
         }
         return true;
     }

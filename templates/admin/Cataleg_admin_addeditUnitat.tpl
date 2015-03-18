@@ -1,4 +1,5 @@
 {pageaddvar name='javascript' value='jQuery'}
+{pageaddvar name='stylesheet' value='vendor/bootstrap/css/bootstrap.css'}
 {adminheader}
 <div class="z-admincontainer">
     <div class="z-adminpageicon">{img modname='core' src='filenew.png' set='icons/large'}</div>
@@ -11,9 +12,9 @@
            <legend>{gt text='Informació de la unitat'}</legend>
            <div class="z-formrow">
                <label for="nom">{gt text="Nom"}</label>
-               <textarea id="nom" name="nom" rows="3" cols="90" maxlength="255">{if $edit}{$unitat.nom}{/if}</textarea>
+               <textarea class="noeditor" id="nom" name="nom" rows="3" cols="90" maxlength="255">{if $edit}{$unitat.nom}{/if}</textarea>
            </div> 
-           <div class="z-formrow">
+           <div class="form-group">
                <label for="descripcio">{gt text="Descripció"}</label>
                <textarea id="descripcio" name="descripcio" rows="7" cols="90" maxlength="630">{if $edit}{$unitat.descripcio}{/if}</textarea>
            </div>
@@ -54,7 +55,7 @@
         </fieldset>
                     {/if}
 </form>
-   
+{notifydisplayhooks eventname='Cataleg.ui_hooks.Cataleg.form_edit' id="#orientacions"}   
 <script type="text/javascript"  language="javascript">
 function cancel($catId){
     // Evitar el submit múltiple. Desactivar botó

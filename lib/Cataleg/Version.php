@@ -17,11 +17,29 @@ class Cataleg_Version extends Zikula_AbstractVersion
     public function getMetaData()
     {
         $meta=array();
-        $meta['version'] = '1.1.1';
+        $meta['version'] = '1.1.2';
         $meta['description'] = $this->__('Elaboració i consulta del catàleg unificat de formació permanent del Departament d\'Ensenyament.');
         $meta['displayname'] = $this->__('Catàleg');
         $meta['url'] = $this->__('cataleg');
         $meta['securityschema'] = array('Cataleg::' => '::','CatalegAdmin::' => '::', 'SiriusAdmin::' => '::');
+        $meta['capabilities'] = array(HookUtil::SUBSCRIBER_CAPABLE => array('enabled' => true));
         return $meta;
+    }
+    /**
+     * Define the hook bundles supported by this module.
+     *
+     * @return void
+     */
+    protected function setupHookBundles()
+    {
+        $bundle = new Zikula_HookManager_SubscriberBundle(
+            $this->name, 'subscriber.Cataleg.ui_hooks.Cataleg',
+            'ui_hooks',
+            $this->__('Cataleg Hooks')
+        );
+        
+        $bundle->addEvent('form_edit', 'Cataleg.ui_hooks.Cataleg.form_edit');
+
+        $this->registerHookSubscriberBundle($bundle);
     }
 }

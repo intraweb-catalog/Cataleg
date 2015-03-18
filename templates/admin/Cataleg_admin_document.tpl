@@ -61,6 +61,7 @@
     <button id='btn_pdf' class="z-bt-pdf" type="button" onclick="javascript:doPdf();" title="{gt text="Genera el document PDF del catàleg"}">{gt text="Exporta a PDF"}</button>
     <button id="btn_cancel" class="z-bt-cancel"  type="button"  onclick="javascript:cancelPdf();" title="{gt text="Cancel·la"}">{gt text="Cancel·la"}</button>
 </div>
+{notifydisplayhooks eventname='Cataleg.ui_hooks.Cataleg.form_edit' id=null}
 <script type="text/javascript">
     function doPdf() {
         // Evitar el submit múltiple. Desactivar botó

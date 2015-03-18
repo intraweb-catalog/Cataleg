@@ -43,7 +43,6 @@
                    <button id="btn_cancel" class="z-bt-cancel"  type="button"  onclick="javascript:cancel({$cat.catId});" title="{gt text="Cancel·la"}">{gt text="Cancel·la"}</button>
                    </div>
 </form>
-   
 <script type="text/javascript"  language="javascript">
 function cancel($catId){
     // Evitar el submit múltiple. Desactivar botó

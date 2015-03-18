@@ -1,4 +1,5 @@
 {pageaddvar name='javascript' value='jQuery'}
+{pageaddvar name='stylesheet' value='vendor/bootstrap/css/bootstrap.css'}
 {adminheader}
 <div class="z-admincontainer">
     <div class="z-adminpageicon">{img modname='core' src='filenew.png' set='icons/large'}</div>
@@ -17,11 +18,11 @@
            
            <div class="z-formrow">
                <label for="nomCurt">{gt text="Nom (curt)"}</label>
-               <textarea id="nomCurt" name="nomCurt" rows="3" cols="90" maxlength="200">{if $edit}{$prior.nomCurt}{/if}</textarea>
+               <textarea id="nomCurt" class="noeditor name="nomCurt" rows="3" cols="90" maxlength="200">{if $edit}{$prior.nomCurt}{/if}</textarea>
            </div>
            <div class="z-formrow">
                <label for="nom">{gt text="Nom"}</label>
-               <textarea id="nom" name="nom" rows="3" cols="90" maxlength="255">{if $edit}{$prior.nom}{/if}</textarea>
+               <textarea id="nom" class="noeditor" name="nom" rows="3" cols="90" maxlength="255">{if $edit}{$prior.nom}{/if}</textarea>
            </div> 
             
            <div class="z-formrow">
@@ -71,7 +72,7 @@
            
            </div>
                    
-
+{notifydisplayhooks eventname='Cataleg.ui_hooks.Cataleg.form_edit' id=null}
    
 <script type="text/javascript"  language="javascript">
 function cancel($eixId){
