@@ -1294,24 +1294,12 @@ class Cataleg_Api_User extends Zikula_AbstractApi {
         return $match;
     }
 
-    /*
-     *  Comprova si un usuari pot realitzar una acció amb una activitat
-     *  El resultat dependrà de l'estat i editabilitat del catàleg, de l'estat de
-     *  l'activitat (en el casos d'edició d'activitat existent) i de si l'usuari 
-     *  pertany al grup propietari de l'activitat
-     * 
-     * @param array $args accio|tipusId|id 
-     *              accio nom de la funció que es vol verificar l'accessibilitat
-     *              id de l'element per verificar (catId, actId o uniId)
-     * 
-     * @return boolean true si es pot executar la funció demanada o false en cas contrari
-     */
-
+    
     /**
      *  Comprova si un usuari pot realitzar una acció amb una activitat
      *
      * > El resultat dependrà de l'estat i editabilitat del catàleg, de l'estat de\n
-     * > l'activitat (en el casos d'edició d'activitat existent) i de si l'usuari \n
+     * > l'activitat (en els casos d'edició d'activitat existent) i de si l'usuari \n
      * > pertany al grup propietari de l'activitat
      * 
      * @param array $args Array amb els paràmetres de la funció

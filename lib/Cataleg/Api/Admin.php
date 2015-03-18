@@ -158,24 +158,29 @@ class Cataleg_Api_Admin extends Zikula_AbstractApi {
     }
     }
     public function saveUnitat($item) {
-     if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
-            return LogUtil::registerPermissionError();
+        if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
+            // Check if user have edit permissions
+            if (!(ModUtil::apiFunc($this->name, 'user', 'haveAccess', array('accio' => 'new', 'id' => $item['uniId'])))){
+                LogUtil::registerStatus('No access');
+                return LogUtil::registerPermissionError();
+            } 
         }
-      if ($item) {
-        if ($item['uniId']) {
-            // Estem editant. La unitat ja existeix
-            $where = "WHERE uniId = " . $item['uniId'];
-            DBUtil::updateObject($item, 'cataleg_unitats', $where);
-            $insertUnitId = 'edit';
-        } else {
-            // Estem creant una unitat nova
-            DBUtil::insertObject($item, 'cataleg_unitats', 'uniId');
-            $insertUnitId = DBUtil::getInsertID('cataleg_unitats', 'uniId');
+        
+        if ($item) {
+            if ($item['uniId']) {
+                // Estem editant. La unitat ja existeix
+                $where = "WHERE uniId = " . $item['uniId'];
+                DBUtil::updateObject($item, 'cataleg_unitats', $where);
+                $insertUnitId = 'edit';
+            } else {
+                // Estem creant una unitat nova
+                DBUtil::insertObject($item, 'cataleg_unitats', 'uniId');
+                $insertUnitId = DBUtil::getInsertID('cataleg_unitats', 'uniId');
+            }
+            return $insertUnitId;
+        }else{
+            return false;
         }
-    return $insertUnitId;
-    }else{
-        return false;
-    }
     }
     public function saveResponsable($item) {
      if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {

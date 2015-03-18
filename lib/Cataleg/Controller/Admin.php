@@ -963,11 +963,18 @@ class Cataleg_Controller_Admin extends Zikula_AbstractController {
      * @return void Plantilla *Cataleg_admin_addeditUnitat.tpl* per a editar les dades
      */
     public function editUnitat() {
-        if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
-            return LogUtil::registerPermissionError();
-        }
         $uniId = FormUtil::getPassedValue('uniId', null, 'GET');
         $unitat = modUtil::apiFunc('Cataleg', 'user', 'getUnitat', array('uniId' => $uniId, 'simple' => true));
+        $isEditor = false;
+        if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
+            // Check if user have edit permissions
+            if (!(ModUtil::apiFunc($this->name, 'user', 'haveAccess', array('accio' => 'new', 'id' => $uniId)))){
+                return LogUtil::registerPermissionError();
+            } else {
+                $isEditor = true;
+            }
+        }
+        
         $cat = modUtil::apiFunc('Cataleg', 'user', 'getCataleg', array('catId' => $unitat['catId']));
         $responsables = modUtil::apiFunc('Cataleg', 'user', 'getAllResponsablesUnitat', array('uniId' => $uniId));
         $grups = modUtil::apiFunc('Cataleg', 'admin', 'getAllGroupsUnits');
@@ -976,6 +983,7 @@ class Cataleg_Controller_Admin extends Zikula_AbstractController {
         $this->view->assign('cat', $cat);
         $this->view->assign('grups', $grups);
         $this->view->assign('responsables', $responsables);
+        $this->view->assign('isEditor', $isEditor);
         return $this->view->fetch('admin/Cataleg_admin_addeditUnitat.tpl');
     }
 
@@ -993,16 +1001,28 @@ class Cataleg_Controller_Admin extends Zikula_AbstractController {
      * @return void Retorna a la funció *unitatsgest* després de desar les dades
      */
     public function addeditUnitat() {
-        if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
-            return LogUtil::registerPermissionError();
-        }
         $item['uniId'] = FormUtil::getPassedValue('uniId', null, 'POST');
-        $item['catId'] = FormUtil::getPassedValue('catId', null, 'POST');
-        $item['nom'] = FormUtil::getPassedValue('nom', null, 'POST');
-        $item['descripcio'] = FormUtil::getPassedValue('descripcio', null, 'POST');
-        $item['gzId'] = FormUtil::getPassedValue('gzId', null, 'POST');
-        $item['activa'] = FormUtil::getPassedValue('activa', 0, 'POST');
-        if (($item['nom'] == '')) {
+        $isEditor = false;
+        if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
+            // Check if user have edit permissions
+            if (!(ModUtil::apiFunc($this->name, 'user', 'haveAccess', array('accio' => 'new', 'id' => $item['uniId'])))){
+                LogUtil::registerStatus('No access');
+                return LogUtil::registerPermissionError();
+            } else {
+                $isEditor = true;
+            }
+        }
+        if ($isEditor) {
+            $item['catId'] = FormUtil::getPassedValue('catId', null, 'POST');
+            $item['descripcio'] = FormUtil::getPassedValue('descripcio', null, 'POST');
+        } else {
+            $item['catId'] = FormUtil::getPassedValue('catId', null, 'POST');
+            $item['nom'] = FormUtil::getPassedValue('nom', null, 'POST');
+            $item['descripcio'] = FormUtil::getPassedValue('descripcio', null, 'POST');
+            $item['gzId'] = FormUtil::getPassedValue('gzId', null, 'POST');
+            $item['activa'] = FormUtil::getPassedValue('activa', 0, 'POST');
+        }
+        if (!$isEditor && ($item['nom'] == '')) {
             LogUtil::registerError($this->__('S\'ha d\'informar del nom per a poder desar la prioritat.'));
             return system::redirect(ModUtil::url('Cataleg', 'admin', 'unitatsgest', array('catId' => $item['catId'])));
         }
@@ -1017,7 +1037,11 @@ class Cataleg_Controller_Admin extends Zikula_AbstractController {
         } else {
             LogUtil::registerError($this->__('No s\'ha pogut desar la unitat.'));
         }
-        return system::redirect(ModUtil::url('Cataleg', 'admin', 'unitatsgest', array('catId' => $item['catId'])));
+        if ($isEditor)
+            return system::redirect(ModUtil::url('Cataleg', 'user', 'view'));
+        else    
+            return system::redirect(ModUtil::url('Cataleg', 'admin', 'unitatsgest', array('catId' => $item['catId'])));
+        
     }
 
     /**
@@ -1076,10 +1100,17 @@ class Cataleg_Controller_Admin extends Zikula_AbstractController {
      * @return void Plantilla *Cataleg_admin_addeditResponsable.tpl* per a introduir les dades
      */
     public function addResponsable() {
-        if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
-            return LogUtil::registerPermissionError();
-        }
         $uniId = FormUtil::getPassedValue('uniId', null, 'GET');
+        $isEditor = false;
+        if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
+            // Check if user have edit permissions
+            if (!(ModUtil::apiFunc($this->name, 'user', 'haveAccess', array('accio' => 'new', 'id' =>  $uniId)))){
+                return LogUtil::registerPermissionError();
+            } else {
+                $isEditor = true;
+            }
+        }
+       
         $unitat = modUtil::apiFunc('Cataleg', 'user', 'getUnitat', array('uniId' => $uniId, 'simple' => true));
         $cat = modUtil::apiFunc('Cataleg', 'user', 'getCataleg', array('catId' => $unitat['catId']));
         $this->view->assign('edit', false);
@@ -1100,8 +1131,13 @@ class Cataleg_Controller_Admin extends Zikula_AbstractController {
      * @return void Plantilla *Cataleg_admin_addediResponsable.tpl* per a editar les dades
      */
     public function editResponsable() {
+        $respunitId = FormUtil::getPassedValue('respunitId', null, 'GET');
+        $responsable = modUtil::apiFunc('Cataleg', 'user', 'getResponsable', array('respunitId' => $respunitId));
         if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
-            return LogUtil::registerPermissionError();
+            // Check if user have edit permissions
+            if (!(ModUtil::apiFunc($this->name, 'user', 'haveAccess', array('accio' => 'new', 'id' =>  $responsable['uniId'])))){
+                return LogUtil::registerPermissionError();
+            } 
         }
         $respunitId = FormUtil::getPassedValue('respunitId', null, 'GET');
         $responsable = modUtil::apiFunc('Cataleg', 'user', 'getResponsable', array('respunitId' => $respunitId));
@@ -1111,6 +1147,7 @@ class Cataleg_Controller_Admin extends Zikula_AbstractController {
         $this->view->assign('responsable', $responsable);
         $this->view->assign('unitat', $unitat);
         $this->view->assign('cat', $cat);
+        $this->view->assign('isEditor', $isEditor);
         return $this->view->fetch('admin/Cataleg_admin_addeditResponsable.tpl');
     }
 
@@ -1128,14 +1165,18 @@ class Cataleg_Controller_Admin extends Zikula_AbstractController {
      * @return void Retorna a la funció *unitatsgest* després de desar les dades
      */
     public function addeditResponsable() {
-        if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
-            return LogUtil::registerPermissionError();
-        }
         $item['respunitId'] = FormUtil::getPassedValue('respunitId', null, 'POST');
         $item['responsable'] = FormUtil::getPassedValue('responsable', null, 'POST');
         $item['email'] = FormUtil::getPassedValue('email', null, 'POST');
         $item['telefon'] = FormUtil::getPassedValue('telefon', null, 'POST');
         $item['uniId'] = FormUtil::getPassedValue('uniId', null, 'POST');
+        if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
+            // Check if user have edit permissions
+            if (!(ModUtil::apiFunc($this->name, 'user', 'haveAccess', array('accio' => 'new', 'id' => $item['uniId'])))){
+                return LogUtil::registerPermissionError();
+            } 
+        }
+        
         if (($item['responsable'] == '')) {
             LogUtil::registerError($this->__('S\'ha d\'informar del nom de la persona responsable per a poder-la desar.'));
             return system::redirect(ModUtil::url('Cataleg', 'admin', 'editUnitat', array('uniId' => $item['uniId'])));
