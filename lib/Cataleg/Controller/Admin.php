@@ -1206,11 +1206,15 @@ class Cataleg_Controller_Admin extends Zikula_AbstractController {
      * @return void Retorna a la funció *editUnitat* amb els missatges d'execució
      */
     public function deleteResponsable() {
-        if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
-            return LogUtil::registerPermissionError();
-        }
         $respunitId = FormUtil::getPassedValue('respunitId', null, 'GET');
         $responsable = modUtil::apiFunc('Cataleg', 'user', 'getResponsable', array('respunitId' => $respunitId));
+        
+        if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
+            if (!(ModUtil::apiFunc($this->name, 'user', 'haveAccess', array('accio' => 'new', 'id' => $responsable['uniId'])))){
+                return LogUtil::registerPermissionError();
+            } 
+        }
+        
         $del = ModUtil::apiFunc('Cataleg', 'user', 'delete', array('que' => 'responsable', 'id' => $respunitId));
         if ($del) {
             LogUtil::registerStatus($this->__('La persona responsable s\'ha esborrat correctament.'));

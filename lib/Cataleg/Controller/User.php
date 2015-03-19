@@ -1260,4 +1260,27 @@ echo "CATID: ".$catId;
         return $this->view->fetch('user/Cataleg_user_cerca_encentre.tpl');
     }
 
+    /**
+     * Edició/gestió de les temàtiques per prioritat en les que participa o s'implica una unitat
+     * @params $uniId id de la unitat
+     */
+    public function tematiques(){
+        // Check permission
+        $this->throwForbiddenUnless(SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_READ));
+
+        $uniId = FormUtil::getPassedValue('uniId', null, 'GET');
+        $catId = FormUtil::getPassedValue('catId', ModUtil::getVar($this->name, 'actiu'), 'GET');
+
+        $prioritats = ModUtil::apiFunc($this->name, 'user', 'getAllPrioritatsCataleg', array('catId' => $catId));
+        $result = array();
+        foreach ($prioritats as $prioritat) {
+            $result[$prioritat['priId']]['prioritat'] = $prioritat['nom'];
+            $result[$prioritat['priId']]['ordre'] = $prioritat['ordre'];
+            $result[$prioritat['priId']]['tematiques'] = ModUtil::apiFunc($this->name, 'user', 'getUnitatsImplicades', array('priId' => $prioritat['priId'], 'uniId' => $uniId));
+        }
+        
+        $view = Zikula_View::getInstance('Cataleg', false);
+        $view->assign('prioritats', $result);
+        return $view->fetch('user/Cataleg_user_tematiques.tpl');
+    }
 }

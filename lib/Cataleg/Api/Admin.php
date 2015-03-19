@@ -182,26 +182,31 @@ class Cataleg_Api_Admin extends Zikula_AbstractApi {
             return false;
         }
     }
+    
+    
     public function saveResponsable($item) {
-     if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
-            return LogUtil::registerPermissionError();
+        if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
+            if (!(ModUtil::apiFunc($this->name, 'user', 'haveAccess', array('accio' => 'new', 'id' => $item['uniId'])))) {
+                return LogUtil::registerPermissionError();
+            }
         }
-      if ($item) {
-        if ($item['respunitId']) {
-            // Estem editant. La persona responsable ja existeix
-            $where = "WHERE respunitId = " . $item['respunitId'];
-            DBUtil::updateObject($item, 'cataleg_responsables', $where);
-            $insertRespunitId = 'edit';
+        if ($item) {
+            if ($item['respunitId']) {
+                // Estem editant. La persona responsable ja existeix
+                $where = "WHERE respunitId = " . $item['respunitId'];
+                DBUtil::updateObject($item, 'cataleg_responsables', $where);
+                $insertRespunitId = 'edit';
+            } else {
+                // Estem creant una nova persona responsable
+                DBUtil::insertObject($item, 'cataleg_responsables', 'respunitId');
+                $insertRespunitId = DBUtil::getInsertID('cataleg_responsables', 'respunitId');
+            }
+            return $insertRespunitId;
         } else {
-            // Estem creant una nova persona responsable
-            DBUtil::insertObject($item, 'cataleg_responsables', 'respunitId');
-            $insertRespunitId = DBUtil::getInsertID('cataleg_responsables', 'respunitId');
+            return false;
         }
-    return $insertRespunitId;
-    }else{
-        return false;
     }
-    }
+
     // Inicialització de taules amb valors per defecte
     public function initAuxiliarTable() {
         //TODO: Això s'hauria de fer en la instal·lació del mòdul

@@ -2336,8 +2336,10 @@ class Cataleg_Api_User extends Zikula_AbstractApi {
                 INNER JOIN cataleg_unitatsImplicades ON cataleg_unitats.uniId = cataleg_unitatsImplicades.uniId
                 INNER JOIN cataleg_prioritats ON cataleg_unitatsImplicades.priId = cataleg_prioritats.priId
                 WHERE
-                    cataleg_unitatsImplicades.priId = '$priId'
-                ORDER BY 
+                    cataleg_unitatsImplicades.priId = '$priId' ";
+        if ($uniId) $sql .= 
+              " AND cataleg_unitatsImplicades.uniId = '$uniId' ";     
+        $sql .="ORDER BY 
                     cataleg_prioritats.ordre";
 
         $result = DBUtil::executeSQL($sql);

@@ -2,9 +2,9 @@
 {pageaddvar name='stylesheet' value='vendor/bootstrap/css/bootstrap.css'}
 {adminheader}
 <div class="z-admincontainer">
-    <div class="z-adminpageicon">{img modname='core' src='filenew.png' set='icons/large'}</div>
-    <h2><a href="{modurl modname='Cataleg' type='admin' func='unitatsgest' catId=$cat.catId}">{$cat.nom}</a>  -  {if $edit}{gt text="Edició d'una unitat"}{else}{gt text="Creació d'una nova unitat"}{/if}</h2>
-
+    <div>
+    <h2>{img modname='core' src='filenew.png' set='icons/small'}<a href="{modurl modname='Cataleg' type='admin' func='unitatsgest' catId=$cat.catId}">{$cat.nom}</a>  -  {if $edit}{gt text="Edició d'una unitat"}{else}{gt text="Creació d'una nova unitat"}{/if}</h2>
+    </div>
     <form name="novaUnitat" id="novaUnitat" class="z-form" action="" method="post" enctype="application/x-www-form-urlencoded">        
         <input type="hidden" id="catId" name="catId" value="{$cat.catId}">
         <input type="hidden" id="isEditor" name="isEditor" value="{$isEditor}">
