@@ -2311,6 +2311,7 @@ class Cataleg_Api_User extends Zikula_AbstractApi {
                     cataleg_unitats.nom AS nomUni,
                     cataleg_unitats.descripcio,
                     cataleg_unitats.activa,
+                    cataleg_unitatsImplicades.impunitId,
                     cataleg_unitatsImplicades.priId,
                     cataleg_unitatsImplicades.uniId,
                     cataleg_unitatsImplicades.tematica,

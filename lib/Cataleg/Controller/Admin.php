@@ -780,7 +780,10 @@ class Cataleg_Controller_Admin extends Zikula_AbstractController {
      */
     public function addImpunit() {
         if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
-            return LogUtil::registerPermissionError();
+            $uniId = FormUtil::getPassedValue('uid', null, 'GET');
+            if (!(ModUtil::apiFunc($this->name, 'user', 'haveAccess', array('accio' => 'new', 'id' => $uniId)))){
+                return LogUtil::registerPermissionError();
+            }
         }
         $priId = FormUtil::getPassedValue('priId', null, 'GET');
         $prior = modUtil::apiFunc('Cataleg', 'user', 'getPrioritat', array('priId' => $priId));
@@ -811,10 +814,14 @@ class Cataleg_Controller_Admin extends Zikula_AbstractController {
      * @return void Plantilla *Cataleg_admin_addeditImpunit.tpl* per a editar les dades
      */
     public function editImpunit($impunitId) {
+        $uniId = FormUtil::getPassedValue('uid', null, 'GET');
         if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
-            return LogUtil::registerPermissionError();
+            if (!(ModUtil::apiFunc($this->name, 'user', 'haveAccess', array('accio' => 'new', 'id' => $uniId)))){
+                return LogUtil::registerPermissionError();
+            }
         }
         $impunitId = FormUtil::getPassedValue('impunitId', null, 'GET');
+        $url = FormUtil::getPassedValue('url', null, 'GET');
         $impunit = modUtil::apiFunc('Cataleg', 'user', 'getImpunit', $impunitId);
         $prior = modUtil::apiFunc('Cataleg', 'user', 'getPrioritat', array('priId' => $impunit['priId']));
         $eix = modUtil::apiFunc('Cataleg', 'user', 'getEix', array('eixId' => $prior['eixId']));
@@ -826,6 +833,8 @@ class Cataleg_Controller_Admin extends Zikula_AbstractController {
         $this->view->assign('eix', $eix);
         $this->view->assign('cat', $cat);
         $this->view->assign('units', $units);
+        $this->view->assign('url', $url);
+        $this->view->assign('uniId', $uniId);
         return $this->view->fetch('admin/Cataleg_admin_addeditImpunit.tpl');
     }
 
