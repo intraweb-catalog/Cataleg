@@ -17,7 +17,7 @@ class Cataleg_Version extends Zikula_AbstractVersion
     public function getMetaData()
     {
         $meta=array();
-        $meta['version'] = '1.1.2';
+        $meta['version'] = '1.1.3';
         $meta['description'] = $this->__('Elaboració i consulta del catàleg unificat de formació permanent del Departament d\'Ensenyament.');
         $meta['displayname'] = $this->__('Catàleg');
         $meta['url'] = $this->__('cataleg');

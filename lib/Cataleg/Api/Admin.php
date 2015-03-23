@@ -137,26 +137,30 @@ class Cataleg_Api_Admin extends Zikula_AbstractApi {
         return false;
     }
     }
+    
     public function saveImpunit($item) {
-     if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
-            return LogUtil::registerPermissionError();
-        }
-      if ($item) {
-        if ($item['impunitId']) {
-            // Estem editant. La unitat implicada ja existeix
-            $where = "WHERE impunitId = " . $item['impunitId'];
-            DBUtil::updateObject($item, 'cataleg_unitatsImplicades', $where);
-            $insertImpunitId = 'edit';
+        /* if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
+          return LogUtil::registerPermissionError();
+          }
+         * 
+         */
+        if ($item) {
+            if ($item['impunitId']) {
+                // Estem editant. La unitat implicada ja existeix
+                $where = "WHERE impunitId = " . $item['impunitId'];
+                DBUtil::updateObject($item, 'cataleg_unitatsImplicades', $where);
+                $insertImpunitId = 'edit';
+            } else {
+                // Estem creant una unitat implicada nova
+                DBUtil::insertObject($item, 'cataleg_unitatsImplicades', 'impunitId');
+                $insertImpunitId = DBUtil::getInsertID('cataleg_unitatsImplicades', 'impunitId');
+            }
+            return $insertImpunitId;
         } else {
-            // Estem creant una unitat implicada nova
-            DBUtil::insertObject($item, 'cataleg_unitatsImplicades', 'impunitId');
-            $insertImpunitId = DBUtil::getInsertID('cataleg_unitatsImplicades', 'impunitId');
+            return false;
         }
-    return $insertImpunitId;
-    }else{
-        return false;
     }
-    }
+
     public function saveUnitat($item) {
         if (!SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_ADMIN)) {
             // Check if user have edit permissions

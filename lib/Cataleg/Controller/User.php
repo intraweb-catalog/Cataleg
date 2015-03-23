@@ -1270,18 +1270,65 @@ echo "CATID: ".$catId;
 
         $uniId = FormUtil::getPassedValue('uniId', null, 'GET');
         $catId = FormUtil::getPassedValue('catId', ModUtil::getVar($this->name, 'actiu'), 'GET');
+        if (ModUtil::apiFunc($this->name, 'user', 'haveAccess', array('accio' => 'new', 'id' => $uniId))) {
+            $prioritats = ModUtil::apiFunc($this->name, 'user', 'getAllPrioritatsCataleg', array('catId' => $catId));
+            $result = array();
+            foreach ($prioritats as $prioritat) {
+                $result[$prioritat['priId']]['prioritat'] = $prioritat['nom'];
+                $result[$prioritat['priId']]['ordre'] = $prioritat['ordre'];
+                $result[$prioritat['priId']]['tematiques'] = ModUtil::apiFunc($this->name, 'user', 'getUnitatsImplicades', array('priId' => $prioritat['priId'], 'uniId' => $uniId));
+            }
 
-        $prioritats = ModUtil::apiFunc($this->name, 'user', 'getAllPrioritatsCataleg', array('catId' => $catId));
-        $result = array();
-        foreach ($prioritats as $prioritat) {
-            $result[$prioritat['priId']]['prioritat'] = $prioritat['nom'];
-            $result[$prioritat['priId']]['ordre'] = $prioritat['ordre'];
-            $result[$prioritat['priId']]['tematiques'] = ModUtil::apiFunc($this->name, 'user', 'getUnitatsImplicades', array('priId' => $prioritat['priId'], 'uniId' => $uniId));
+            $view = Zikula_View::getInstance('Cataleg', false);
+            $view->assign('prioritats', $result);
+            $view->assign('uniId', $uniId);
+            return $view->fetch('user/Cataleg_user_tematiques.tpl');
         }
+    }
+    
+    /**
+     * Edició/gestió de les temàtiques per prioritat en les que participa o s'implica una unitat.
+     * Aplicació dels nous valors o creació d'una nova entrada
+     * @params $uid id de la unitat
+     * @params $m (mode e -> edicio // a -> addició)
+     * @params $impunitId (id del registre corresponent a la temàtica /unitats implicades
+     */
+    public function setTematica($args){
+        // Check permission
+        $this->throwForbiddenUnless(SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_READ));
         
-        $view = Zikula_View::getInstance('Cataleg', false);
-        $view->assign('prioritats', $result);
-        $view->assign('uniId', $uniId);
-        return $view->fetch('user/Cataleg_user_tematiques.tpl');
+        $item = array();               
+        $item['impunitId']   = FormUtil::getPassedValue('impunitId', null, 'POST');
+        $item['priId']       = FormUtil::getPassedValue('priId', null, 'POST');
+        $item['uniId']       = FormUtil::getPassedValue('uniId', null, 'POST');
+        $item['tematica']    = FormUtil::getPassedValue('tematica', null, 'POST');
+        $item['pContacte']    = FormUtil::getPassedValue('pContacte', null, 'POST');
+        $item['email']       = FormUtil::getPassedValue('email', null, 'POST');
+        $item['telContacte'] = FormUtil::getPassedValue('telContacte', null, 'POST');
+        $item['dispFormador']= FormUtil::getPassedValue('dispFormador', 0, 'POST');
+        if (ModUtil::apiFunc($this->name, 'user', 'haveAccess', array('accio' => 'new', 'id' => $item['uniId']))) {
+        //print_r($item); exit(0);
+            ModUtil::apiFunc($this->name, 'admin', 'saveImpunit', $item);
+        //return ModUtil::func($this->name, 'user', 'tematiques', array('uniId' => $item['uniId']));
+            return system::redirect(ModUtil::url($this->name, 'user', 'tematiques', array('uniId' => $item['uniId'])));                        
+        } else LogUtil::registerError ($this_>__('No teniu permís per modificar les temàtiques'));
+    }
+    
+    /**
+     * Esborra el registre impunitId especificat a la taula d'unitats implicades/temàtiques
+     * @params $impunitId id del registre de la taula unitatsImplicades
+     * @params $uniId id de la unitat per verificar permisos i calcular la URL de retorn
+     * @return pàgina de temàtiques
+     */
+    public function deleteImpunit(){
+        $impunitId = FormUtil::getPassedValue('impunitId', null, 'GET');
+        $uniId = FormUtil::getPassedValue('uniId', null, 'GET');
+
+        if (ModUtil::apiFunc($this->name, 'user', 'haveAccess', array('accio' => 'new', 'id' => $uniId))) {
+            $where = 'impunitId =' . $impunitId;
+            DBUtil::deleteWhere('cataleg_unitatsImplicades', $where);
+            return system::redirect(ModUtil::url($this->name, 'user', 'tematiques', array('uniId' => $uniId)));  
+        }
     }
 }
+

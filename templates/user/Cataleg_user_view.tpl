@@ -44,7 +44,7 @@
                     {{/if}}
                 </script>
             </th>
-            <th>{gt text='Accions'}</th>
+            <th style="text-align:center">{gt text='Accions'}</th>
         </tr>
     </thead>
     {if (isset($cataleg.unitats))}
@@ -63,7 +63,7 @@
                             </th>
                             <th>
                                 {if $cataleg.editable || $isGestor}
-                                    <a href="{modurl modname='Cataleg' type='user' func='tematiques' uniId= $unitat.uniId}"><h4 class="z-block-title">{gt text="Temàtiques"}</h4></a>
+                                    <a href="{modurl modname='Cataleg' type='user' func='tematiques' uniId= $unitat.uniId}"><h4>{gt text="Temàtiques"}</h4></a>
                                 {/if}
                             </th>
                         </tr>
@@ -99,7 +99,7 @@
                         {/case}
                         {/switch}
                     </td>
-                    <td>
+                    <td style="text-align:center">
                         {assign var='options' value=$activitat.options}
                         {section name='options' loop=$options}
                             <a href="{$options[options].url|safetext}">{img modname='core' set='icons/extrasmall' src=$options[options].image title=$options[options].title alt=$options[options].title}</a>

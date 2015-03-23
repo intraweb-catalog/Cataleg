@@ -6,8 +6,8 @@
 <script>
 $jq(document).ready(function(){
     //Examples of how to assign the ColorBox event to elements
-    $jq(".iframe").colorbox({iframe:true, width:"60%", height:"50%"});
-    $jq(".inline").colorbox({inline:true, width:"60%", height:"70%"});
+    $jq(".iframe").colorbox({iframe:true, width:"60%", height:"50%", title:"{{gt text='Informació de la unitat'}}"});
+    $jq(".inline").colorbox({inline:true, width:"60%", height:"70%", title:"{{gt text='Informació de la unitat'}}"});
     $jq(".callbacks").colorbox({
         onOpen:function(){ },
         onLoad:function(){ },

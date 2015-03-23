@@ -123,6 +123,7 @@ class Cataleg_Installer extends Zikula_AbstractInstaller
             case '1.1.1':
                 HookUtil::registerSubscriberBundles($this->version->getHookSubscriberBundles());
             case '1.1.2':
+            case '1.1.3':
         }
         return true;
     }
