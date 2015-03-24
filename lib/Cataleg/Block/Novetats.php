@@ -59,18 +59,21 @@ class Cataleg_Block_Novetats extends Zikula_Controller_AbstractBlock {
         // Check if the module is available
         if (!ModUtil::available('Cataleg'))
             return;
-
+        
+        $renderedOutput = '';
         // Get the view object
         $view = Zikula_View::getInstance('Cataleg', false);
 
         $novetats = ModUtil::apiFunc($this->name, 'user', 'getNovetats');
-        $view->assign('novetats', $novetats);
-        
-        $s = $view->fetch('block/Cataleg_block_Novetats.tpl');
+        if ($novetats['novetats'] || $novetats['canvis']) {
+            $view->assign('novetats', $novetats);
 
-        $blockinfo['content'] = $s;
+            $s = $view->fetch('block/Cataleg_block_Novetats.tpl');
 
-        return BlockUtil::themesideblock($blockinfo);
+            $blockinfo['content'] = $s;
+            $renderedOutput = BlockUtil::themesideblock($blockinfo);
+        }
+        return $renderedOutput;
     }    
 
     public function update($blockinfo) {               
