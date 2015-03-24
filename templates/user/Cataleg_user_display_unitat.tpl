@@ -61,7 +61,8 @@ $jq(document).ready(function(){
             {/if}
 
             {if !empty($unitat.descripcio)}
-            <h4>Descripció de les actuacions de la unitat en matèria de formació</h4>
+            {*<h4>Descripció de les actuacions de la unitat en matèria de formació</h4>*}
+            <h4>{gt text="Actuacions i objectius de la unitat en matèria de formació"}</h4>
             <div class="news_hometext" style='font-size:0.8em; text-align:justify ' > 
                 {$unitat.descripcio}                  
             </div>    
@@ -105,7 +106,8 @@ $jq(document).ready(function(){
             {/if}
 
             {if !empty($unitat.descripcio)}
-            <h4>Descripció de les actuacions de la unitat en matèria de formació</h4>
+            {*<h4>Descripció de les actuacions de la unitat en matèria de formació</h4>*}
+            <h4>{gt text="Actuacions i objectius de la unitat en matèria de formació"}</h4>
             <div style='text-align:justify ' > 
                 {$unitat.descripcio}                  
             </div>    

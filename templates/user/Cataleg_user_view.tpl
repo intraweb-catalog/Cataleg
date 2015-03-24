@@ -7,6 +7,7 @@
     document.observe("dom:loaded", function() {
     Zikula.UI.Tooltips($$('.tooltips'));
 });
+
 </script>
 {/pageaddvarblock}
 <h1>{$titol}</h1>
@@ -63,7 +64,7 @@
                             </th>
                             <th>
                                 {if $cataleg.editable || $isGestor}
-                                    <a href="{modurl modname='Cataleg' type='user' func='tematiques' uniId= $unitat.uniId}"><h4>{gt text="Temàtiques"}</h4></a>
+                                    <a href="{modurl modname='Cataleg' type='user' func='tematiques' uniId= $unitat.uniId}"><span style="text-align:center"><button class="z-button">{gt text="Temàtiques"}</button></span></a>
                                 {/if}
                             </th>
                         </tr>
