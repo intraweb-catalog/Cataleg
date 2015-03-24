@@ -1269,9 +1269,10 @@ echo "CATID: ".$catId;
         $this->throwForbiddenUnless(SecurityUtil::checkPermission('Cataleg::', '::', ACCESS_READ));
 
         $uniId = FormUtil::getPassedValue('uniId', null, 'GET');
-        $catId = FormUtil::getPassedValue('catId', ModUtil::getVar($this->name, 'actiu'), 'GET');
+        $uni = ModUtil::apiFunc($this->name, 'user', 'getUnitat', array('uniId'=> $uniId, 'simple' => true));
+
         if (ModUtil::apiFunc($this->name, 'user', 'haveAccess', array('accio' => 'new', 'id' => $uniId))) {
-            $prioritats = ModUtil::apiFunc($this->name, 'user', 'getAllPrioritatsCataleg', array('catId' => $catId));
+            $prioritats = ModUtil::apiFunc($this->name, 'user', 'getAllPrioritatsCataleg', array('catId' => $uni['catId']));
             $result = array();
             foreach ($prioritats as $prioritat) {
                 $result[$prioritat['priId']]['prioritat'] = $prioritat['nom'];
