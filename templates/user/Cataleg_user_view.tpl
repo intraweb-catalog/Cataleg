@@ -56,7 +56,7 @@
                 {if (isset($unitat.activitats))}{*|@count) > 0*}                
                         {*<thead>                *}
                         <tr><th colspan = '2'>
-                            <a class='inline' href="#inline_content-{$unitat.uniId}"  __title='Més informació de la unitat'><h4 class="z-block-title" style="border-top-left-radius: 0px !important; border-top-right-radius: 0px"><span style="font-size:1.2em;color:whitesmoke">{$unitat.nom}</span></a>
+                            <a class='inline' href="#inline_content-{$unitat.uniId}"  title="{gt text='Més informació de la unitat'}"><h4 class="z-block-title" style="border-top-left-radius: 0px !important; border-top-right-radius: 0px"><span style="font-size:1.2em;color:whitesmoke">{$unitat.nom}</span></a>
                             {if $cataleg.editable || $isGestor}
                                 <a href="{modurl modname='Cataleg' type='admin' func='editUnitat' uniId= $unitat.uniId}">{img style="padding-right: 5px; cursor:pointer; float:left" modname="core" set="icons/small" src="xedit.png" __alt="Editar la informació de la unitat" __title='Editar la informació de la unitat'}</a>                        
                             {/if}
