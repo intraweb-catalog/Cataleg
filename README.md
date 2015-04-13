@@ -24,6 +24,12 @@ Changelog
 
 ### Master branch
 
+### Cataleg 1.1.3 (2015/04/13)
+
+  - Don't show 'Novetats' block when it's empty.
+  - Editors can edit/add/remove 'temàtiques'. New function also for gestors
+  - Editors can edit his unit info
+
 ### Cataleg 1.1.2 (2015/03/18)
 
 Implementing Scribite v5 to Cataleg
