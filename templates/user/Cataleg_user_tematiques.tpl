@@ -1,6 +1,8 @@
 {*<pre>{$prioritats|print_r}</pre>*}
 {pageaddvar name='javascript' value='jQuery'}
 <a href="{modurl modname='Cataleg' type='user' func='view'}"><span style="text-decoration:underline">{gt text="Tornar"}</span></a>
+<h4 class="z-block-title" style="font-size:1.2em; text-align:center">{$unitat.nom}</h4>
+<hr>
 {if $prioritats}
     {foreach from=$prioritats item="prioritat" key="k"}
         <h3>{$prioritat.ordre}.- {$prioritat.prioritat}</h3>        
@@ -73,7 +75,7 @@
             <tbody>
                 <tr>
                     <form  id="frm_{$k}a" class="z-form" action="{modurl modname='Cataleg' type='user' func='setTematica'}" method="post" enctype="multipart/form-data">            
-                        <input type="hidden" id="uniId" name="uniId" value="{$uniId}">
+                        <input type="hidden" id="uniId" name="uniId" value="{$unitat.uniId}">
                         <input type="hidden" id="priId" name="priId" value="{$k}">
                         <td><input type="text" id="tematica" name="tematica"  value="" size="25" required></td>
                         <td><input id="pContacte" name="pContacte" value="" size="25" required></td>

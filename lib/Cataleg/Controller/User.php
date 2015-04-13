@@ -1282,7 +1282,7 @@ echo "CATID: ".$catId;
 
             $view = Zikula_View::getInstance('Cataleg', false);
             $view->assign('prioritats', $result);
-            $view->assign('uniId', $uniId);
+            $view->assign('unitat', $uni);
             return $view->fetch('user/Cataleg_user_tematiques.tpl');
         }
     }
