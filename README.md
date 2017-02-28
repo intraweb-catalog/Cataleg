@@ -24,6 +24,8 @@ Changelog
 
 ### Master branch
 
+  - Fixing error in "Cataleg_admin_addeditPrior.tpl" template (tagging as 1.1.3.1)
+  
 ### Cataleg 1.1.3 (2015/04/13)
 
   - Don't show 'Novetats' block when it's empty.
